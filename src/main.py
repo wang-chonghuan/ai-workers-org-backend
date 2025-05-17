@@ -114,5 +114,15 @@ app = Playground(
     agents=[web_agent, finance_agent, reasoning_agent, image_agent]
 ).get_app()
 
+@app.get("/health")
+async def health_check():
+    """
+    Health check endpoint that returns the first 10 characters of the OpenAI API key.
+    """
+    api_key = os.getenv("OPENAI_API_KEY", "")  # Provide a default empty string
+    return {"openai_api_key_prefix": api_key[:10]}
+
 if __name__ == "__main__":
-    serve_playground_app("playground:app", reload=True)
+    # serve_playground_app("playground:app", reload=True)
+    # Corrected path for local execution if needed, matching Procfile:
+    serve_playground_app("ai-workers-org-backend.src.main:app", reload=True)
