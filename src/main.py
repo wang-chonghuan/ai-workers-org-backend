@@ -121,7 +121,8 @@ app.add_middleware(
     allow_origins=[
         "https://ai-workers.net",  # 主域名
         "https://api.ai-workers.net",  # API子域名
-        "https://aiworkers-frontend.pages.dev"  # Vercel部署地址
+        "https://aiworkers-frontend.pages.dev",  # Vercel部署地址
+        "http://localhost:5173"  # 本地开发环境
     ],  
     allow_credentials=True,
     allow_methods=["*"],  # 允许所有HTTP方法
