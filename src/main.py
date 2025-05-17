@@ -123,6 +123,5 @@ async def health_check():
     return {"openai_api_key_prefix": api_key[:10]}
 
 if __name__ == "__main__":
-    # serve_playground_app("playground:app", reload=True)
-    # Corrected path for local execution if needed, matching Procfile:
-    serve_playground_app("ai-workers-org-backend.src.main:app", reload=True)
+    # Corrected path for local execution from ai-workers-org-backend directory:
+    serve_playground_app("main:app", reload=True)
