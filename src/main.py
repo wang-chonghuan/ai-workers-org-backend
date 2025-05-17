@@ -118,7 +118,7 @@ app = Playground(
 # 添加CORS中间件配置
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ai-workers-org.vercel.app"],  # 允许的前端源
+    allow_origins=["https://api.ai-workers.org"],  # 允许的前端源
     allow_credentials=True,
     allow_methods=["*"],  # 允许所有HTTP方法
     allow_headers=["*"],  # 允许所有HTTP头
