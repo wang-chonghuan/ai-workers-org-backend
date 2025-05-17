@@ -8,6 +8,7 @@ from agno.tools.dalle import DalleTools
 from agno.media import Image
 import os
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware  # 导入CORS中间件
 
 # 加载.env文件中的环境变量
 load_dotenv()
@@ -113,6 +114,15 @@ image_agent = Agent(
 app = Playground(
     agents=[web_agent, finance_agent, reasoning_agent, image_agent]
 ).get_app()
+
+# 添加CORS中间件配置
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://ai-workers-org.vercel.app"],  # 允许的前端源
+    allow_credentials=True,
+    allow_methods=["*"],  # 允许所有HTTP方法
+    allow_headers=["*"],  # 允许所有HTTP头
+)
 
 @app.get("/health")
 async def health_check():

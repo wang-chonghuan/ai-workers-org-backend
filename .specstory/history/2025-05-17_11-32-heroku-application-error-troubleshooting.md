@@ -285,3 +285,27 @@ git config --global --add safe.directory D:/0-dev/ai-workers/ai-workers-org-back
 
 ---
 
+_**User**_
+
+the requested resource.
+
+aiworkers-7f2f83d421…playground/status:1 
+ Failed to load resource: net::ERR_FAILED
+ai-workers-org.vercel.app/:1 Access to fetch at 'https://aiworkers-7f2f83d42176.herokuapp.com/v1/playground/status' from origin 'https://ai-workers-org.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+aiworkers-7f2f83d421…playground/status:1 
+ Failed to load resource: net::ERR_FAILED
+ai-workers-org.vercel.app/:1 Access to fetch at 'https://aiworkers-7f2f83d42176.herokuapp.com/v1/playground/status' from origin 'https://ai-workers-org.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+aiworkers-7f2f83d421…playground/status:1 
+ Failed to load resource: net::ERR_FAILED
+﻿
+
+我在这个前端@https://ai-workers-org.vercel.app/ 访问刚部署的heroku这个项目报错, 我是不是应该在这个py里添加CORS, 我要允许这个源访问
+
+---
+
+_**Assistant**_
+
+
+
+---
+
