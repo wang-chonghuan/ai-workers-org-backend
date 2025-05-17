@@ -119,6 +119,7 @@ app = Playground(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://www.ai-workers.net",
         "https://ai-workers.net",  # 主域名
         "https://api.ai-workers.net",  # API子域名
         "https://aiworkers-frontend.pages.dev",  # Vercel部署地址
