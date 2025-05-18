@@ -8,7 +8,7 @@ from agno.tools.dalle import DalleTools
 from agno.media import Image
 import os
 from dotenv import load_dotenv
-from fastapi.middleware.cors import CORSMiddleware  # 导入CORS中间件
+from fastapi.middleware.cors import CORSMiddleware
 
 # 加载.env文件中的环境变量
 load_dotenv()
@@ -17,6 +17,9 @@ agent_storage: str = "tmp/agents.db"
 
 # 从环境变量获取OpenAI API密钥
 openai_api_key = os.getenv("OPENAI_API_KEY")
+
+# 从环境变量读取是否允许localhost CORS的标志
+ALLOW_LOCALHOST_CORS = os.getenv("ALLOW_LOCALHOST_CORS", "false").lower() == "true"
 
 web_agent = Agent(
     name="Web Agent",
@@ -115,19 +118,23 @@ app = Playground(
     agents=[web_agent, finance_agent, reasoning_agent, image_agent]
 ).get_app()
 
+# 构建允许的源列表
+allowed_origins = [
+    "https://ai-workers.net",
+    "https://api.ai-workers.net",
+    "https://aiworkers-frontend.pages.dev",
+]
+
+if ALLOW_LOCALHOST_CORS:
+    allowed_origins.append("http://localhost:5173")
+
 # 添加CORS中间件配置
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://www.ai-workers.net",
-        "https://ai-workers.net",  # 主域名
-        "https://api.ai-workers.net",  # API子域名
-        "https://aiworkers-frontend.pages.dev",  # Vercel部署地址
-        "http://localhost:5173"  # 本地开发环境
-    ],  
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],  # 允许所有HTTP方法
-    allow_headers=["*"],  # 允许所有HTTP头
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/health")
@@ -135,9 +142,8 @@ async def health_check():
     """
     Health check endpoint that returns the first 10 characters of the OpenAI API key.
     """
-    api_key = os.getenv("OPENAI_API_KEY", "")  # Provide a default empty string
+    api_key = os.getenv("OPENAI_API_KEY", "")
     return {"openai_api_key_prefix": api_key[:10]}
 
 if __name__ == "__main__":
-    # Corrected path for local execution from ai-workers-org-backend directory:
     serve_playground_app("main:app", reload=True)
