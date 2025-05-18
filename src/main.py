@@ -121,7 +121,7 @@ app = Playground(
 # 构建允许的源列表
 allowed_origins = [
     "https://ai-workers.net",
-    "https://api.ai-workers.net",
+    "https://www.ai-workers.net",
     "https://aiworkers-frontend.pages.dev",
 ]
 
