@@ -104,7 +104,7 @@ image_agent = Agent(
         "当被要求创建图片时，使用DALLE工具生成高质量图片",
         "提供详细、专业的图片解析",
         "使用markdown格式美化输出",
-        "在回答中插入相关的生成图片",
+        "当你使用DALLE工具生成图片后，请在文字描述中提及你已生成图片。框架会自动展示图片，你无需在回复中再次用markdown插入图片。",
     ],
     storage=SqliteAgentStorage(table_name="image_agent", db_file=agent_storage),
     add_datetime_to_instructions=True,
@@ -120,9 +120,9 @@ app = Playground(
 
 # 构建允许的源列表
 allowed_origins = [
-    "https://ai-workers.net",
-    "https://www.ai-workers.net",
-    "https://aiworkers-frontend.pages.dev",
+    "https://ai-workers.org",
+    "https://www.ai-workers.org",
+    "https://finley2-ui.pages.dev/",
 ]
 
 if ALLOW_LOCALHOST_CORS:
