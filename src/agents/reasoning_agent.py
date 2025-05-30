@@ -2,15 +2,18 @@ import os
 from dotenv import load_dotenv
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from agno.storage.agent.sqlite import SqliteAgentStorage
+from agno.storage.agent.postgres import PostgresAgentStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
 
 # Load .env file environment variables
 load_dotenv()
 
-agent_storage: str = "../tmp/agents.db"
+from infra.db import get_supabase_db_url
+
 openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable not set. Please ensure it is available.")
 
 reasoning_agent = Agent(
     name="Reasoning Agent",
@@ -31,7 +34,7 @@ reasoning_agent = Agent(
         "使用你的工具来获取信息",
         "使用表格和图表来展示数据",
     ],
-    storage=SqliteAgentStorage(table_name="reasoning_agent", db_file=agent_storage),
+    storage=PostgresAgentStorage(table_name="reasoning_agent", db_url=get_supabase_db_url()),
     add_datetime_to_instructions=True,
     add_history_to_messages=True,
     num_history_responses=5,

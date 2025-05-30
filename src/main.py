@@ -2,7 +2,7 @@ from agno.playground import Playground, serve_playground_app
 import os
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from src.agents import all_agents
+from agents import all_agents
 
 # 加载.env文件中的环境变量
 load_dotenv()
