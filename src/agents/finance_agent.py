@@ -2,14 +2,16 @@ import os
 from dotenv import load_dotenv
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from agno.storage.agent.sqlite import SqliteAgentStorage
+from agno.storage.agent.postgres import PostgresAgentStorage
+from infra.db import get_supabase_db_url
 from agno.tools.yfinance import YFinanceTools
 
 # Load .env file environment variables
 load_dotenv()
 
-agent_storage: str = "../tmp/agents.db"
 openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable not set. Please ensure it is available.")
 
 finance_agent = Agent(
     name="Finance Agent",
@@ -26,7 +28,7 @@ finance_agent = Agent(
         )
     ],
     instructions=["Always use tables to display data"],
-    storage=SqliteAgentStorage(table_name="finance_agent", db_file=agent_storage),
+    storage=PostgresAgentStorage(table_name="finance_agent", db_url=get_supabase_db_url()),
     add_datetime_to_instructions=True,
     add_history_to_messages=True,
     num_history_responses=5,

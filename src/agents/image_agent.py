@@ -2,15 +2,17 @@ import os
 from dotenv import load_dotenv
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from agno.storage.agent.sqlite import SqliteAgentStorage
+from agno.storage.agent.postgres import PostgresAgentStorage
+from infra.db import get_supabase_db_url
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.dalle import DalleTools
 
 # Load .env file environment variables
 load_dotenv()
 
-agent_storage: str = "../tmp/agents.db"
 openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable not set. Please ensure it is available.")
 
 image_agent = Agent(
     name="Image Agent",
@@ -30,7 +32,7 @@ image_agent = Agent(
         "使用markdown格式美化输出",
         "当你使用DALLE工具生成图片后，请在文字描述中提及你已生成图片。框架会自动展示图片，你无需在回复中再次用markdown插入图片。",
     ],
-    storage=SqliteAgentStorage(table_name="image_agent", db_file=agent_storage),
+    storage=PostgresAgentStorage(table_name="image_agent", db_url=get_supabase_db_url()),
     add_datetime_to_instructions=True,
     add_history_to_messages=True,
     num_history_responses=5,
