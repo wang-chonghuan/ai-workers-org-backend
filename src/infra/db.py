@@ -2,6 +2,8 @@
 import os
 import urllib.parse
 from dotenv import load_dotenv
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import Engine
 
 # Attempt to load .env file from standard locations relative to this file or project root
 # This helps in development environments
@@ -16,6 +18,8 @@ else:
     # Fallback: load_dotenv will search in current working directory or parent directories
     load_dotenv()
 
+_shared_engine: Engine | None = None
+
 def get_supabase_db_url():
     """
     Constructs the Supabase DB URL using new parameters, with environment variables taking precedence.
@@ -23,7 +27,7 @@ def get_supabase_db_url():
     """
     # New connection parameters (USER provided)
     default_db_host = "aws-0-eu-west-1.pooler.supabase.com"
-    default_db_port = "5432"
+    default_db_port = "6543"  # Updated port for transaction pool mode
     default_db_name = "postgres"
     default_db_user = "postgres.ykjjdlscllhpypnjzrby"
     # Password from original reasoning_agent.py (as per "密码不变" - password unchanged)
@@ -46,22 +50,32 @@ def get_supabase_db_url():
 
     return db_url
 
+def get_shared_db_engine() -> Engine:
+    """
+    Returns a shared SQLAlchemy engine instance.
+    Creates the engine if it doesn't exist yet.
+    """
+    global _shared_engine
+    if _shared_engine is None:
+        db_url = get_supabase_db_url()
+        # If SSL errors persist, consider adding connect_args:
+        # e.g., _shared_engine = create_engine(db_url, connect_args={"sslmode": "require"})
+        # For now, using default engine options.
+        _shared_engine = create_engine(db_url)
+    return _shared_engine
+
 if __name__ == '__main__':
     try:
-        url = get_supabase_db_url()
-        print(f"Generated Supabase DB URL: {url}")
-        print("This script can be run to verify DB URL generation.")
-        print("To test the actual connection, you would typically use a library like SQLAlchemy:")
-        print("  Ensure 'sqlalchemy' and 'psycopg2-binary' (or 'psycopg') are installed.")
-        print("  Example (uncomment to run):")
-        # from sqlalchemy import create_engine, text
-        # try:
-        #     engine = create_engine(url)
-        #     with engine.connect() as connection:
-        #         result = connection.execute(text("SELECT 1 AS connection_test"))
-        #         print(f"Database connection successful. Test query result: {result.scalar_one()}")
-        # except Exception as e:
-        #     print(f"Database connection failed: {e}")
+        print("Attempting to get shared Supabase DB engine...")
+        engine = get_shared_db_engine()
+        print(f"Successfully obtained shared engine: {engine}")
+        print(f"Connecting to DB with URL: {engine.url}")
+        try:
+            with engine.connect() as connection:
+                result = connection.execute(text("SELECT 1 AS connection_test"))
+                print(f"Database connection successful. Test query result: {result.scalar_one()}")
+        except Exception as e:
+            print(f"Database connection failed: {e}")
     except ValueError as ve:
         print(f"Configuration Error: {ve}")
     except Exception as e:

@@ -5,11 +5,11 @@ from agno.models.openai import OpenAIChat
 from agno.storage.agent.postgres import PostgresAgentStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
+from infra.db import get_shared_db_engine
 
 # Load .env file environment variables
 load_dotenv()
 
-from infra.db import get_supabase_db_url
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 if not openai_api_key:
@@ -34,7 +34,7 @@ reasoning_agent = Agent(
         "使用你的工具来获取信息",
         "使用表格和图表来展示数据",
     ],
-    storage=PostgresAgentStorage(table_name="reasoning_agent", db_url=get_supabase_db_url()),
+    storage=PostgresAgentStorage(table_name="reasoning_agent", db_engine=get_shared_db_engine()),
     add_datetime_to_instructions=True,
     add_history_to_messages=True,
     num_history_responses=5,

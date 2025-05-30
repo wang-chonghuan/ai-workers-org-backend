@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.storage.agent.postgres import PostgresAgentStorage
-from infra.db import get_supabase_db_url
+from infra.db import get_shared_db_engine
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.dalle import DalleTools
 
@@ -32,7 +32,7 @@ image_agent = Agent(
         "使用markdown格式美化输出",
         "当你使用DALLE工具生成图片后，请在文字描述中提及你已生成图片。框架会自动展示图片，你无需在回复中再次用markdown插入图片。",
     ],
-    storage=PostgresAgentStorage(table_name="image_agent", db_url=get_supabase_db_url()),
+    storage=PostgresAgentStorage(table_name="image_agent", db_engine=get_shared_db_engine()),
     add_datetime_to_instructions=True,
     add_history_to_messages=True,
     num_history_responses=5,
