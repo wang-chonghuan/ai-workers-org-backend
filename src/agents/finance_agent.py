@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.storage.agent.postgres import PostgresAgentStorage
-from infra.db import get_shared_db_engine
+from ..infra.db import get_shared_db_engine
 from agno.tools.yfinance import YFinanceTools
 
 # Load .env file environment variables

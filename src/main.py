@@ -2,7 +2,7 @@ from agno.playground import Playground, serve_playground_app
 import os
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from agents import all_agents
+from src.agents import all_agents
 
 # 加载.env文件中的环境变量
 load_dotenv()
@@ -42,4 +42,4 @@ async def health_check():
     return {"openai_api_key_prefix": api_key[:10]}
 
 if __name__ == "__main__":
-    serve_playground_app("main:app", reload=True)
+    serve_playground_app("src.main:app", reload=True)

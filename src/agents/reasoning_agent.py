@@ -5,7 +5,7 @@ from agno.models.openai import OpenAIChat
 from agno.storage.agent.postgres import PostgresAgentStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
-from infra.db import get_shared_db_engine
+from ..infra.db import get_shared_db_engine
 
 # Load .env file environment variables
 load_dotenv()
