@@ -1,1 +1,2 @@
-# ai-workers-org-backend
+cd ~/finley-backend/
+python -m src.main
