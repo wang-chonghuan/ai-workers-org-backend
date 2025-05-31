@@ -1,4 +1,4 @@
-agno==1.5
+agno==1.5.0
 annotated-types==0.7.0
 anyio==4.9.0
 beautifulsoup4==4.13.4
@@ -39,6 +39,9 @@ pandas==2.2.3
 peewee==3.18.1
 platformdirs==4.3.7
 primp==0.15.0
+psycopg==3.2.9
+psycopg-binary==3.2.9
+psycopg2-binary==2.9.10
 pycparser==2.22
 pydantic==2.11.4
 pydantic-settings==2.9.1
